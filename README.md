@@ -1,4 +1,4 @@
-# PluralsighAdministration
+# PluralsightAdministration
 Building application with React and Flux example
 
 Tech Stack
