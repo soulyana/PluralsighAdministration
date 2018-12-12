@@ -2,6 +2,7 @@ $ = jQuery = require('jquery'); //defines jQuery globally
 var React = require('react');
 var Home = require('./components/homePage');
 var About = require('./components/about/aboutPage');
+var Header = require('./components/common/header');
 
 // workaround for using "use strict" by using an ify
 (function (win) {
@@ -17,7 +18,8 @@ var About = require('./components/about/aboutPage');
 
             return (
                 <div>
-                    <Child />
+                    <Header/>
+                    <Child/>
                 </div>
             );
         }
