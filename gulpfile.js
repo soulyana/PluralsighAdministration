@@ -15,6 +15,7 @@ var config = {
     paths: {
         html: './src/*.html', 
         js: './src/**/*.js',
+        images: './src/images/*',
         css: [
             'node_modules/bootstrap/dist/css/bootstrap.min.css',
             'node_modules/bootstrap/dist/css/bootstrap-theme.min.css'
