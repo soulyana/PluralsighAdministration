@@ -1,7 +1,7 @@
 # PluralsightAdministration
 Building application with React and Flux example
 
-Tech Stack
+Tech Stack:
 Node & npm - packages
 React - components
 React router - routing
