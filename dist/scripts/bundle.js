@@ -29135,7 +29135,8 @@ var About = React.createClass({displayName: "About",
                         React.createElement("li", null, "Node"), 
                         React.createElement("li", null, "Gulp"), 
                         React.createElement("li", null, "Browserify"), 
-                        React.createElement("li", null, "Bootstrap")
+                        React.createElement("li", null, "Bootstrap"), 
+                        React.createElement("li", null, "Will add material-ui ")
                     )
                 )
             )
