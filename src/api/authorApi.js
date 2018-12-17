@@ -14,7 +14,7 @@ var _clone = function(item) {
 };
 
 var AuthorApi = {
-    getAllAuthoers: function() {
+    getAllAuthors: function() {
         return _clone(authors);
     },
 
