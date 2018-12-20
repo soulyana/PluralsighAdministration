@@ -5,6 +5,7 @@
 var React = require("react");
 var Input = require('../common/textinput');
 
+
 var AuthorForm = React.createClass({
   render: function() {
     return (
