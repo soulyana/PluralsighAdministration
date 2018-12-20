@@ -5,14 +5,14 @@ var React = require('react');
 var About = React.createClass({
     statics: {
         willTransitionTo: function(transition, params, query, callback) {
-            if(!confirm(`Are you sure you want to read a page that\'s this boring?`)) {
+            if(!confirm('Are you sure you want to read a page that is this boring?')) {
                 transition.about();
             } else {
                 callback();
             }
         },
         willTransitionFrom: function(transition, component) {
-            if(!confirm(`Are you sure you want to leave a page that\'s this excititing?`)) {
+            if(!confirm('Are you sure you want to leave a page that is this excititing?')) {
                 transition.about();
             }
         }
