@@ -50601,6 +50601,7 @@ var ManageAuthorPage = React.createClass({displayName: "ManageAuthorPage",
         if(!this.authorFormIsValid()) {
             return;
         }
+        
         AuthorApi.saveAuthor(this.state.author);
         this.setState({dirty: false});
         toastr.success('Author saved.');
