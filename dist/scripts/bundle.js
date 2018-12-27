@@ -50993,6 +50993,16 @@ var AuthorActions = {
       actionType: ActionTypes.CREATE_AUTHOR,
       author: newAuthor
     });
+  },
+
+  updateAuthor: function(author) {
+    var updateAuthor = AuthorApi.saveAuthor(author);
+
+    //Hey dispatcher, go tell all the stores that an author was just updated.
+    Dispatcher.dispatch({
+      actionType: ActionTypes.UPDATE_AUTHOR,
+      author: updateAuthor
+    });
   }
 };
 
@@ -51285,90 +51295,92 @@ module.exports = AuthorPage;
 },{"../../actions/authorActions":204,"../../stores/authorStore":222,"./authorList":211,"react":202,"react-router":33}],213:[function(require,module,exports){
 "use strict";
 
-var React = require('react');
-var Router = require('react-router');
-var AuthorForm = require('./authorForm');
-var AuthorActions = require('../../actions/authorActions');
-var AuthorStore = require('../../stores/authorStore');
-var toastr = require('toastr');
+var React = require("react");
+var Router = require("react-router");
+var AuthorForm = require("./authorForm");
+var AuthorActions = require("../../actions/authorActions");
+var AuthorStore = require("../../stores/authorStore");
+var toastr = require("toastr");
 
 var ManageAuthorPage = React.createClass({displayName: "ManageAuthorPage",
-    mixins: [
-        Router.Navigation
-    ],
+  mixins: [Router.Navigation],
 
-    statics: {
-        willTransitionFrom: function(transition, component) {
-            if (component.state.dirty && !confirm('Leave without saving?')) {
-                transition.abort();
-            }
-        }
-    },
-
-    getInitialState: function() {
-        return {
-            author: { id: '', firstName: '', lastName: '' },
-            errors: {},
-            dirty: false
-        };
-    },
-
-    componentWillMount: function() {
-        var authorId = this.props.params.id; //from the path '/author:id'
-
-        if(authorId) {
-            this.setState({author: AuthorStore.getAuthorById(authorId) });
-        }
-    },
-
-    setAuthorState: function(event) {
-        this.setState({dirty: true});
-        var field = event.target.name;
-        var value = event.target.value;
-        this.state.author[field] = value;
-        return this.setState({author: this.state.author});
-    },
-
-    authorFormIsValid: function() {
-        var formIsValid = true;
-        this.state.errors = {}; //clear any previous errors
-
-        if(this.state.author.firstName.length < 3) {
-            this.state.errors.firstName = 'First name must be at least 3 characters.';
-            formIsValid = false;
-        }
-        if(this.state.author.lastName.length < 3) {
-            this.state.errors.lastName = 'Last name must be at least 3 characters.';
-            formIsValid = false;
-        }
-
-        this.setState({errors: this.state.errors});
-        return formIsValid;
-    },
-
-    saveAuthor: function(event) {
-        event.preventDefault();
-
-        if(!this.authorFormIsValid()) {
-            return;
-        }
-        
-        AuthorActions.createAuthor(this.state.author);
-        this.setState({dirty: false});
-        toastr.success('Author saved.');
-        this.transitionTo('authors');
-    },
-
-    render: function() {
-        return (
-            React.createElement(AuthorForm, {
-                author: this.state.author, 
-                onChange: this.setAuthorState, 
-                onSave: this.saveAuthor, 
-                errors: this.state.errors}
-            )           
-        );
+  statics: {
+    willTransitionFrom: function(transition, component) {
+      if (component.state.dirty && !confirm("Leave without saving?")) {
+        transition.abort();
+      }
     }
+  },
+
+  getInitialState: function() {
+    return {
+      author: { id: '', firstName: '', lastName: '' },
+      errors: {},
+      dirty: false
+    };
+  },
+
+  componentWillMount: function() {
+    var authorId = this.props.params.id; //from the path '/author:id'
+    if (authorId) {
+      this.setState({ author: AuthorStore.getAuthorById(authorId) });
+    }
+  },
+
+  setAuthorState: function(event) {
+    this.setState({ dirty: true });
+    var field = event.target.name;
+    var value = event.target.value;
+    this.state.author[field] = value;
+    return this.setState({ author: this.state.author });
+  },
+
+  authorFormIsValid: function() {
+    var formIsValid = true;
+    this.state.errors = {}; //clear any previous errors
+
+    if (this.state.author.firstName.length < 3) {
+      this.state.errors.firstName = "First name must be at least 3 characters.";
+      formIsValid = false;
+    }
+    if (this.state.author.lastName.length < 3) {
+      this.state.errors.lastName = "Last name must be at least 3 characters.";
+      formIsValid = false;
+    }
+
+    this.setState({ errors: this.state.errors });
+    return formIsValid;
+  },
+
+  saveAuthor: function(event) {
+    event.preventDefault();
+
+    if (!this.authorFormIsValid()) {
+      return;
+    }
+
+    if (this.state.author.id) {
+      AuthorActions.updateAuthor(this.state.author);
+    } else {
+      AuthorActions.createAuthor(this.state.author);
+    }
+
+    this.setState({ dirty: false });
+    toastr.success("Author saved.");
+    this.transitionTo("authors");
+  },
+
+  render: function() {
+    return (
+      React.createElement(AuthorForm, {
+        author: this.state.author, 
+        onChange: this.setAuthorState, 
+        onSave: this.saveAuthor, 
+        errors: this.state.errors}
+      )
+    );
+  }
 });
 
 module.exports = ManageAuthorPage;
@@ -51493,7 +51505,8 @@ var keyMirror = require('react/lib/keyMirror');
 
 module.exports = keyMirror( {
     INITIALIZE: null, 
-    CREATE_AUTHOR: null
+    CREATE_AUTHOR: null,
+    UPDATE_AUTHOR: null
 });
 
 },{"react/lib/keyMirror":187}],219:[function(require,module,exports){
@@ -51585,6 +51598,12 @@ Dispatcher.register(function(action) {
       break;
     case ActionTypes.CREATE_AUTHOR:
       _authors.push(action.author);
+      AuthorStore.emitChange();
+      break;
+    case ActionTypes.UPDATE_AUTHOR:
+      var existingAuthor = _.find(_authors, {id: action.author.id});
+      var existingAuthorIndex = _.indexOf(_authors, existingAuthor);
+      _authors.splice(existingAuthorIndex, 1, action.author);
       AuthorStore.emitChange();
       break;
     default:
