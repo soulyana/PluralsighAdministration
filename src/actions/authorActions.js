@@ -1,8 +1,8 @@
 "use strict";
 
-var Dispatcher = require("../dispatcher/appDispatcher");
-var AuthorApi = require("../api/authorApi");
-var ActionTypes = require("../constants/actionTypes");
+var Dispatcher = require('../dispatcher/appDispatcher');
+var AuthorApi = require('../api/authorApi');
+var ActionTypes = require('../constants/actionTypes');
 
 var AuthorActions = {
   createAuthor: function(author) {
@@ -26,6 +26,7 @@ var AuthorActions = {
   },
 
   deleteAuthor: function(id) {
+    debugger;
     AuthorApi.deleteAuthor(id);
 
     Dispatcher.dispatch({

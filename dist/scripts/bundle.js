@@ -50980,9 +50980,9 @@ module.exports = require('./lib/React');
 },{"jquery":5}],204:[function(require,module,exports){
 "use strict";
 
-var Dispatcher = require("../dispatcher/appDispatcher");
-var AuthorApi = require("../api/authorApi");
-var ActionTypes = require("../constants/actionTypes");
+var Dispatcher = require('../dispatcher/appDispatcher');
+var AuthorApi = require('../api/authorApi');
+var ActionTypes = require('../constants/actionTypes');
 
 var AuthorActions = {
   createAuthor: function(author) {
@@ -51006,6 +51006,7 @@ var AuthorActions = {
   },
 
   deleteAuthor: function(id) {
+    debugger;
     AuthorApi.deleteAuthor(id);
 
     Dispatcher.dispatch({
@@ -51244,6 +51245,7 @@ var AuthorList = React.createClass({displayName: "AuthorList",
 
   deleteAuthor: function(id, event) {
     event.preventDefault();
+    debugger;
     AuthorActions.deleteAuthor(id);
     toastr.success('Author Deleted');
   },
@@ -51311,6 +51313,7 @@ var AuthorPage = React.createClass({displayName: "AuthorPage",
     },
 
     _onChange: function() {
+        debugger;
         this.setState({ authors: AuthorStore.getAllAuthors()});
     },
 
@@ -51637,12 +51640,13 @@ Dispatcher.register(function(action) {
       AuthorStore.emitChange();
       break;
     case ActionTypes.UPDATE_AUTHOR:
-      var existingAuthor = _.find(_authors, {id: action.author.id});
+      var existingAuthor = _.find(_authors, { id: action.author.id });
       var existingAuthorIndex = _.indexOf(_authors, existingAuthor);
       _authors.splice(existingAuthorIndex, 1, action.author);
       AuthorStore.emitChange();
       break;
     case ActionTypes.DELETE_AUTHOR:
+      debugger;
       _.remove(_authors, function(author) {
         return action.id === author.id;
       });

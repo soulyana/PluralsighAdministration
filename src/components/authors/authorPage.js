@@ -24,6 +24,7 @@ var AuthorPage = React.createClass({
     },
 
     _onChange: function() {
+        debugger;
         this.setState({ authors: AuthorStore.getAllAuthors()});
     },
 
